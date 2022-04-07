@@ -1,0 +1,214 @@
+Criação da database:
+
+1) CREATE database db_trabalho
+
+*****
+2)
+CREATE TABLE Produto (
+    codigo_produto varchar(20) PRIMARY KEY,
+    nome varchar(50),
+    descricao varchar(50),
+    quantidade_est int,
+    data_fabricacao date,
+    valor_unitario numeric,
+    fk_Categoria_codigo_categoria varchar(20),
+    fk_Empresa_cnpj varchar(14),
+    fk_Funcionario_codigo_funci varchar(20)
+);
+
+CREATE TABLE Categoria (
+    codigo_categoria varchar(20) PRIMARY KEY,
+    nome varchar(50),
+    descricao varchar(50)
+);
+
+CREATE TABLE Cliente (
+    codigo_cliente varchar(20) PRIMARY KEY,
+    nome_completo varchar(50),
+    nome_usuario varchar(50),
+    email varchar(30),
+    cpf varchar(11),
+    data_nascimento date,
+    endereco varchar(50)
+);
+
+CREATE TABLE Funcionario (
+    codigo_funci varchar(20) PRIMARY KEY,
+    nome varchar(50),
+    cpf varchar(11)
+);
+
+CREATE TABLE Empresa (
+    cnpj varchar(14) PRIMARY KEY,
+    Nome varchar(50)
+);
+
+CREATE TABLE Pedido (
+    numero serial PRIMARY KEY,
+    data_pedido date,
+    data_entrega date,
+    fk_Cliente_codigo_cliente varchar(20)
+);
+
+CREATE TABLE Venda_Efetuado (
+    preco_venda numeric,
+    quantidade smallint,
+    desconto numeric,
+    fk_Produto_codigo_produto varchar(20),
+    fk_Pedido_numero serial
+);
+
+CREATE TABLE Atribui (
+    fk_Funcionario_codigo_funci varchar(20),
+    fk_Categoria_codigo_categoria varchar(20)
+);
+ 
+ALTER TABLE Produto ADD CONSTRAINT FK_Produto_2
+    FOREIGN KEY (fk_Categoria_codigo_categoria)
+    REFERENCES Categoria (codigo_categoria)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Produto ADD CONSTRAINT FK_Produto_3
+    FOREIGN KEY (fk_Empresa_cnpj)
+    REFERENCES Empresa (cnpj)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Produto ADD CONSTRAINT FK_Produto_4
+    FOREIGN KEY (fk_Funcionario_codigo_funci)
+    REFERENCES Funcionario (codigo_funci)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Pedido ADD CONSTRAINT FK_Pedido_2
+    FOREIGN KEY (fk_Cliente_codigo_cliente)
+    REFERENCES Cliente (codigo_cliente)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Venda_Efetuado ADD CONSTRAINT FK_Venda_Efetuado_1
+    FOREIGN KEY (fk_Produto_codigo_produto)
+    REFERENCES Produto (codigo_produto);
+ 
+ALTER TABLE Venda_Efetuado ADD CONSTRAINT FK_Venda_Efetuado_2
+    FOREIGN KEY (fk_Pedido_numero)
+    REFERENCES Pedido (numero);
+ 
+ALTER TABLE Atribui ADD CONSTRAINT FK_Atribui_1
+    FOREIGN KEY (fk_Funcionario_codigo_funci)
+    REFERENCES Funcionario (codigo_funci)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Atribui ADD CONSTRAINT FK_Atribui_2
+    FOREIGN KEY (fk_Categoria_codigo_categoria)
+    REFERENCES Categoria (codigo_categoria)
+    ON DELETE RESTRICT;
+
+*****
+3)
+Inserir dados nas tabelas:
+
+insert into categoria (codigo_categoria,nome,descricao)
+values 	('123456789','Alimentos','Produtos alimenticios.'),
+	('134567891','Limpeza','Produtos de limpeza.'),
+	('345678923','Eletronicos','Eletronicos em geral.'),
+	('4567891231','Vestuário','Roupas em geral.'),
+	('5678912343','Papelaria','Artigos de papelaria.');
+
+insert into cliente (codigo_cliente,nome_completo,nome_usuario,email,cpf,data_nascimento,endereco)
+values 	('1112223334','João da Silva','Joaodacompra.','Joaodasilva@email.com','22233344455','22/03/1968','Rua das Coves 32'),
+	('222333444','Maria Bela','Belacomprando','mariabela@email.com','33344455566','10/09/82','Rua dos Bromélias 44'),
+	('4445556667','Jose Carlos','Comprazé','Josecarlos@email.com','44455566677','15/02/72','Rua dos Rosa 192'),
+	('5556667778','Beto Rodrigo','rodrigaocompras','rodrigo92@email.com','2220005568','01/05/92','Avenida Pinheiro 1039'),
+	('8889996663','Tupinanbá Onofre','onofreshop','tupinimba@email.com','55566688877','19/12/42','Rua dos Alegrins 742');
+
+
+insert into funcionario(codigo_funci,nome,cpf)values 
+	('123','Lucas Feitosa','4725004147'),
+	('213','Deusadir','4725004257'),
+	('231','Diego','5555004147'),
+	('1321','Luiz','12345678911'),
+	('1234','Tarcisio','4725147147'),
+	
+
+insert into produto (codigo_produto,nome,descricao,quantidade_est,data_fabricacao,valor_unitario)
+values 	('12345659','Flanela','Limpeza','999','01/01/2021','75.00'),
+       	('12555559','Regua','Papelaria','999','02/01/2021','87.50'),
+       	('12666659','Macarrao','Comida','999','01/04/1837','1.00'),
+	('12777759','Sunga','Alimetos','999','01/01/2022','75.00'),
+	('12999959','Nokia','Eletronicos','1','01/01/1012','9999999.99');
+
+insert into produto (codigo_produto,nome,descricao,quantidade_est,data_fabricacao,valor_unitario)
+values 	('03175659','Bombril','Limpeza','375','02/11/2021','5.00'),
+	('25779002','Lapiseira','Papelaria','695','06/01/2022','7.00'),
+	('15185430','Carne Bovina','Alimentos','173','03/04/2022','21.90'),
+	('96764278','Calça Jeans','Vestuário','581','20/06/2021','99.90'),
+	('08631217','Playstation 5','Eletronicos','134','22/02/2022','7.500'),
+ 	('03799659','Desinfetante','Limpeza','188','15/03/2022','9.75'),
+	('67317200','Borracha','Papelaria','007','30/09/2021','6.40'),
+	('12899659','Batata Pringles','Comida','460','19/03/2022','14.00'),
+	('82480571','Tênis Nike Corrida','Vestuário','082','16/10/2021','275.00'),
+	('08891217','Iphone 11','Eletronicos','960','07/12/2021','3.999');
+
+insert into empresa (cnpj, nome) values ('12345678911223','GrupoUm')
+
+insert into venda_efetuado(preco_venda,quantidade,desconto)
+values  ('50.00','5','0'),
+        ('65.00','40','500'),
+        ('700','3','0'),
+        ('900.00','8','0'),
+        ('700.00','6','89');
+
+insert into venda_efetuado(preco_venda,quantidade,desconto,fk_produto_codigo_produto)
+		values ('14','1','0','12899659')
+
+4)	update produto set descricao = 'Alimentos'
+		where nome = 'Macarrao'
+
+	update produto set quantidade_est  = '500'
+		where quantidade_est  = '999'
+
+	update produto set descricao  = 'Alimentos'
+		where descricao   = 'Alimetos'
+
+	update funcionario  set nome  = 'Diego'
+		where nome   = 'leticia Melo'
+
+5)	delete from  funcionario where nome  = 'Lucas ferroso'
+	delete from  funcionario where nome  = 'Luiz inacio lula da Silva'
+
+6)	
+a)	SELECT * FROM produto p
+	LEFT JOIN categoria c
+	on p.codigo_produto = c.codigo_categoria;
+
+	SELECT * FROM produto p
+	RIGHT JOIN categoria c
+	on p.codigo_produto = c.codigo_categoria;
+	
+b)	SELECT COUNT (*) FROM produto WHERE valor_unitario  > 100
+
+	SELECT descricao, count(descricao) from produto
+	GROUP by descricao order by descricao
+
+
+c) 	SELECT MAX(valor_unitario) FROM produto
+	SELECT MIN(valor_unitario) FROM produto
+
+	SELECT * FROM produto p
+	inner JOIN venda_efetuado  ve
+	on p.valor_unitario  = ve.preco_venda ;
+
+	SELECT * FROM pedido p
+	inner JOIN venda_efetuado ve  
+	on p.numero  = ve.fk_pedido_numero ;
+
+	SELECT * FROM pedido p
+	inner JOIN cliente c 
+	on p.fk_cliente_codigo_cliente  = c.codigo_cliente  ;
+
+
+d)	SELECT * FROM pedido p
+	inner join venda_efetuado ve
+ 	 on p.numero = ve.fk_pedido_numero
+	inner join cliente c
+  	on c.codigo_cliente = p.fk_cliente_codigo_cliente
+	inner join produto pr
+  	on pr.codigo_produto = ve.fk_produto_codigo_produto
